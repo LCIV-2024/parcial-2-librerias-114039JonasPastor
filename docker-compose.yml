@@ -1,1 +1,36 @@
-# // TODO: Implementar el docker-compose
+# //* TODO: Implementar el docker-compose
+services:
+  libreria-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: libreria-service
+    ports:
+      - "8080:8080"
+    volumes:
+      - h2_data:/data
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:h2:file:/data/libreria_db
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_H2_CONSOLE_ENABLED=true
+      - SPRING_H2_CONSOLE_PATH=/h2-console
+      - SPRING_SQL_INIT_MODE=always
+    networks:
+      - libreria-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  h2_data:
+    driver: local
+
+networks:
+  libreria-network:
+    driver: bridge
+
