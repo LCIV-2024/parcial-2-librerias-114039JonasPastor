@@ -38,6 +38,9 @@ public class ReservationService {
         //- TODO: Implementar la creación de una reserva
         // Validar que el usuario existe
         User usuario = userService.getUserEntity(requestDTO.getUserId());
+        if(usuario == null){
+            throw new RuntimeException("Usuario no encontrado con ID: " + requestDTO.getUserId());
+        }
         
         // Validar que el libro existe y está disponible
         Book libro = bookRepository.findByExternalId(requestDTO.getBookExternalId())
