@@ -1,4 +1,4 @@
-# //* TODO: Implementar el docker-compose
+# //- TODO: Implementar el docker-compose
 services:
   libreria-app:
     build:
